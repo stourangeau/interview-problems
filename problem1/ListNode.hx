@@ -1,6 +1,8 @@
 /*
 * Basic implementation of linked list, with a middleNode function.
-* The challenge here is to make the MiddleNode function as efficient as possible
+*
+* TASK:
+*  Improve the efficiency of the middle node function
 */
 
 class ListNode

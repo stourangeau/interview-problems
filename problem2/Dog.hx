@@ -1,7 +1,9 @@
 /*
 * PetDog has a full name (first and last) and optionally has puppies.
 * When we rename the dog, we also want to rename the puppies last names
-* Refactor this so it isn't shit
+*
+* TASK:
+*   Refactor this class so its not terrible. You can improve the API as much as you like, as long as functionality is the same
 */
 
 class Dog
@@ -11,7 +13,7 @@ class Dog
         var pet = new Dog("Walter White");
         var pup = pet.addPup("Junior White");
         pet.setName("Walter Heisenberg");
-        
+
         trace(pup.name);
     }
 

@@ -1,7 +1,10 @@
 /*
   ThingDoer takes a thing, and a promise, and does the thing when the promise succeeds.
-  What are the potential erros in this code?
-  Refactor to avoid errors
+
+  TASK:
+    1. Identify potential errors in the code
+    2. Refactor to remove all errors
+    3. Write tests to validate you have no errors 
 */
 
 class ThingDoer
