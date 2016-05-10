@@ -4,7 +4,7 @@
   TASK:
     1. Identify potential errors in the code
     2. Refactor to remove all errors
-    3. Write tests to validate you have no errors 
+    3. Write tests to validate you have no errors
 */
 
 class ThingDoer
@@ -82,8 +82,9 @@ interface IThing
 class Promise<T>
 {
     public  var didSucceed:Bool;
+    public  var isComplete:Bool;
 
-    private var _value:T;
+    private var _value:Null<T>;
     private var _success:Void->Void;
     private var _failure:Void->Void;
 
@@ -120,5 +121,10 @@ class Promise<T>
     {
         if(!didSucceed) throw "can't get value of failed future";
         return _value;
+    }
+
+    public function hasComplete() :T
+    {
+        return _value != null;
     }
 }

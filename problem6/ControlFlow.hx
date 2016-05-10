@@ -1,5 +1,5 @@
 /*
-TASK: Improve the readability of this class
+TASK: Improve the readability of this code
 */
 
 class ControlFlow
