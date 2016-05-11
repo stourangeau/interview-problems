@@ -32,14 +32,21 @@ class ListNode
     // returns the median node, from given node to the end of the list
     public static function middleNode(head:ListNode):ListNode
     {
-        var middleIndex = Math.floor(ListNode.length(head) / 2);
+        var middleNode = head;
         var node = head;
 
-        for(i in 0...middleIndex){
+        while (node.next != null)
+		{
             node = node.next;
+		    middleNode = middleNode.next;				
+
+			if (node.next != null)
+			{
+				node = node.next;
+			}
         }
 
-        return node;
+        return middleNode;
     }
 
     // returns the numbe of nodes in the list
