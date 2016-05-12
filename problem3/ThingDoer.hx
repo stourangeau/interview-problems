@@ -14,14 +14,12 @@ class ThingDoer
         var doer = new ThingDoer();
         var thing = new Thing(1);
 
-        var t = new haxe.Timer(1000);
-
         doer.doThing(thing, prom);
         haxe.Timer.delay( function() { Math.random() < 0.5 ? prom.setSuccess("succeeded") : prom.setFailure(); }, 1000);
     }
 
 
-    public var didThing:Bool;
+    public var didThing(default, null):Bool;
     private var _thing:IThing;
 
     public  function new() : Void {}
@@ -29,9 +27,15 @@ class ThingDoer
     public function doThing<T>(thing:IThing, promise:Promise<T> = null):Void
     {
         _thing = thing;
-        if(promise == null) onSetComplete();
-        promise.onSuccess(onSetComplete);
-        promise.onFailure(onFailure);
+        if (promise == null) 
+        {
+            onSetComplete();
+        }
+        else
+        {
+            promise.onSuccess(onSetComplete);
+            promise.onFailure(onFailure);
+        }
     }
 
 
@@ -43,8 +47,11 @@ class ThingDoer
 
     private function onSetComplete():Void
     {
-        _thing.doThing();
-        _thing = null;
+        if (_thing != null)
+        {
+            _thing.doThing();
+            _thing = null;
+        }
         didThing = true;
     }
 
@@ -81,8 +88,7 @@ interface IThing
 
 class Promise<T>
 {
-    public  var didSucceed:Bool;
-    public  var isComplete:Bool;
+    public  var didSucceed(default, null):Bool;
 
     private var _value:Null<T>;
     private var _success:Void->Void;
@@ -123,8 +129,57 @@ class Promise<T>
         return _value;
     }
 
-    public function hasComplete() :T
+    public function hasComplete() : Bool
     {
         return _value != null;
+    }
+}
+
+class TestCases extends haxe.unit.TestCase {
+    
+    public function testNullParams() {
+        var prom = new Promise<String>();
+        var doer = new ThingDoer();
+        var thing = new Thing(1);
+
+        // These should not crash 
+        doer.doThing(thing); 
+        doer.doThing(null, prom);
+
+        // verify not doing it
+           assertFalse(doer.isDoingThing());
+    }    
+    
+    public function testDoingThing() {
+        var prom = new Promise<String>();
+        var doer = new ThingDoer();
+        var thing = new Thing(1);
+
+        // verify no already doing it
+        assertFalse(doer.isDoingThing());
+
+        // start doing it
+        doer.doThing(thing, prom);
+        
+        // verify now doing it
+           assertTrue(doer.isDoingThing());
+
+        // promise will trigger in 1 sec
+        haxe.Timer.delay( function() { Math.random() < 0.5 ? prom.setSuccess("succeeded") : prom.setFailure(); }, 1000);
+        
+        // setup delay test to verify not doing it once promise is over
+        haxe.Timer.delay( function() { assertFalse(doer.isDoingThing());  }, 1100);        
+    }
+}
+
+class MyTest {
+    
+    public static function main(){
+        var r = new haxe.unit.TestRunner();
+        r.add(new TestCases());
+        
+        r.run();
+        
+        trace(r.result);
     }
 }
